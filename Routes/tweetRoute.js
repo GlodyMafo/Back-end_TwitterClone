@@ -7,24 +7,24 @@ const tweetsController=require('../Controllers/tweetsController')
 
 // Lire tous les tweets
 
-tweetsRoute.get('/tweets', tweetsController.showTweet);
+tweetsRoute.get('/', tweetsController.showTweet);
 
 
 // Créer un nouveau tweet
 
-tweetsRoute.post('/tweets', tweetsController.postTweet);
+tweetsRoute.post('/', tweetsController.postTweet);
 
 
 // Lire un tweet à partir de l'Id utilisateur
 
-tweetsRoute.get('/tweets/:id', tweetsController.showById);
+tweetsRoute.get('/:id', tweetsController.showById);
 
 // Modification d'un tweet
 
-tweetsRoute.put('/tweets/:id', tweetsController.editTweet);
+tweetsRoute.put('/:id', tweetsController.editTweet);
 
 // Supprimer un tweet
 
-tweetsRoute.delete('/tweets/:id', tweetsController.deleteTweet);
+tweetsRoute.delete('/:id', tweetsController.deleteTweet);
 
 module.exports=tweetsRoute;
