@@ -1,7 +1,7 @@
-const express=require('express')
-const tweetsRoute=express.Router()
+const express = require('express')
+const tweetsRoute = express.Router()
 
-const tweetsController=require('../Controllers/tweetsController') 
+const tweetsController = require('../Controllers/tweetsController')
 
 
 
@@ -27,4 +27,4 @@ tweetsRoute.put('/:id', tweetsController.editTweet);
 
 tweetsRoute.delete('/:id', tweetsController.deleteTweet);
 
-module.exports=tweetsRoute;
+module.exports = tweetsRoute;

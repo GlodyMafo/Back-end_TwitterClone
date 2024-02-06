@@ -8,24 +8,24 @@ const usersController = require('../Controllers/usersController')
 
 // voir tous les utilisateurs
 
-usersRoute.get('/', usersController.showTweet);
+usersRoute.get('/', usersController.showUsers);
 
 
 // Créer un nouveau tweet
 
-usersRoute.post('/', usersController.postTweet);
+usersRoute.post('/', usersController.postUser);
 
 
 // Lire un tweet à partir de l'Id utilisateur
 
-usersRoute.get('/:id', usersController.showById);
+usersRoute.get('/:id', usersController.showUserById);
 
 // Modification d'un tweet
 
-usersRoute.put('/:id', usersController.editTweet);
+usersRoute.put('/:id', usersController.editUser);
 
 // Supprimer un tweet
 
-usersRoute.delete('/:id', usersController.deleteTweet);
+usersRoute.delete('/:id', usersController.deleteUser);
 
 module.exports = usersRoute;
