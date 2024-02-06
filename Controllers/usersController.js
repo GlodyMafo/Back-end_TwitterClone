@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 const users=[];
 
-exports.users=(req, res) => {
+exports.showUsers=(req, res) => {
     res.json(users);
   }
 
@@ -12,26 +11,10 @@ exports.postUser=(req, res)=>{
     newUser.id = users.length + 1;
     users.push(newUser);
     res.json(newUser);  
-=======
-const users = [];
-
-exports.showUsers = (req, res) => {
-    res.json(users);
-}
-
-// Ajouter un nouvel utilisateur
-
-exports.postUser = (req, res) => {
-    const newUser = req.body;
-    newUser.id = users.length + 1;
-    users.push(newUser);
-    res.json(newUser);
->>>>>>> develop
 }
 
 // Afficher un utilisateur par son id
 
-<<<<<<< HEAD
 exports.showUserById=(req, res) => {
     const userId = parseInt(req.params.id);
     const user = users.find((user) => user.id === userId);
@@ -45,26 +28,10 @@ exports.showUserById=(req, res) => {
 // Modification les information d'un utilisateur
 
 exports.editUser=(req, res) => {
-=======
-exports.showUserById = (req, res) => {
-    const userId = parseInt(req.params.id);
-    const user = users.find((user) => user.id === userId);
-    if (!user) {
-        res.status(404).send("l'utilisateur est introuvable");
-        return;
-    }
-    res.json(user);
-}
-
-// Modification les information d'un utilisateur
-
-exports.editUser = (req, res) => {
->>>>>>> develop
     const userId = parseInt(req.params.id);
     const updatedUser = req.body;
     const user = users.find((user) => user.id === userId);
     if (!user) {
-<<<<<<< HEAD
       res.status(404).send('Utilisateur introuvable');
       return;
     }
@@ -84,24 +51,3 @@ exports.deleteTweet=(req, res) => {
     users.splice(tweetIndex, 1);
     res.json({"message": "Tweet supprimé"});
   };
-=======
-        res.status(404).send('Utilisateur introuvable');
-        return;
-    }
-    Object.assign(user, updatedUser);
-    res.json(user);
-}
-
-// Supprimer un compte utilisateur
-
-exports.deleteUser = (req, res) => {
-    const userId = parseInt(req.params.id);
-    const userIndex = users.findIndex((user) => user.id === userId);
-    if (userIndex === -1) {
-        res.status(404).send('Tweet introuvable');
-        return;
-    }
-    users.splice(tweetIndex, 1);
-    res.json({ "message": "L'utilisateur est supprimé avec succès" });
-};
->>>>>>> develop

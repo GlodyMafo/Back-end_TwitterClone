@@ -2,9 +2,9 @@ const express = require('express');
 
 const app = express();
 
-const tweetRoute = require('./Controller/tweetRoute.js')
+const tweetRoute = require('./Routes/tweetRoute.js')
 
-const usersRoute = require('./Controller/usersRoutes.js')
+const usersRoute = require('./Routes/usersRoutes.js')
 
 const port = 8000;
 
