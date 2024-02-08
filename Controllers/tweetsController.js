@@ -22,8 +22,9 @@ exports.showTweet = (req, res) => {
 exports.postTweet = (req, res) => {
   const newTweet = req.body;
   newTweet.id = tweets.length + 1;
-  tweets.push(newTweet,image);
-  res.json(image);
+  newTweet.image = req.file.path;
+  tweets.push(newTweet);
+  res.json(newTweet);
 }
 
 // Lire un tweet à partir de l'Id utilisateur
