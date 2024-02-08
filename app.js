@@ -4,7 +4,7 @@ const app = express();
 
 const tweetRoute = require('./Routes/tweetRoute.js')
 
-const usersRoute = require('./Routes/usersRoutes.js')
+const usersRoute = require('./Routes/usersRoutes.js');
 
 const port = 8000;
 
