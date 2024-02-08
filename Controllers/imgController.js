@@ -20,13 +20,13 @@ const storage = multer.diskStorage({
     filename: (req, file, callback) => {
 
         const name = file.originalname.split(' ').join('_');
-        // const extention = MIME_TYPES[file.mimetype];
+        const extention = MIME_TYPES[file.mimetype];
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
 
-        callback(null, name + '-' + uniqueSuffix);
+        callback(null, name + '-' + uniqueSuffix+extention);
     }
 })
 
-// const upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
 
-module.exports=multer(storage);
+module.exports=upload;
