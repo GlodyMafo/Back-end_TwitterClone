@@ -22,6 +22,7 @@ exports.showUsers = (req, res) => {
 exports.postUser = (req, res) => {
     const newUser = req.body;
     newUser.id = users.length + 1;
+    newUser.image = req.file.path;
     users.push(newUser);
     res.json(newUser);
 }
