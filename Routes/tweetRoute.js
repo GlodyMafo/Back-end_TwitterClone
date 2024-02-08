@@ -1,14 +1,18 @@
-const express = require('express')
+const express = require('express');
 
-const tweetsRoute = express.Router()
+const tweetsRoute = express.Router();
 
-const tweetsController = require('../Controllers/tweetsController')
+const tweetsController = require('../Controllers/tweetsController');
+
+const multer=require ('../Controllers/imgController.js');
+
+const upload = multer({ dest: './les_images/'});
 
 
 
 // Lire tous les tweets
 
-tweetsRoute.get('/', tweetsController.showTweet);
+tweetsRoute.get('/', upload.single('image'), tweetsController.showTweet);
 
 
 // Créer un nouveau tweet
@@ -22,7 +26,7 @@ tweetsRoute.get('/:id', tweetsController.showById);
 
 // Modification d'un tweet
 
-tweetsRoute.put('/:id', tweetsController.editTweet);
+tweetsRoute.put('/:id',upload.single('image'), tweetsController.editTweet);
 
 // Supprimer un tweet
 

@@ -10,6 +10,10 @@ const tweets = [
     }
 ]
 
+// const multer=require ('../Controllers/imgController.js');
+
+// const upload = multer({ dest: './les_images/'});
+
 // Lire tous les tweets
 
 exports.showTweet = (req, res) => {
