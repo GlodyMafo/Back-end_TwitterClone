@@ -3,11 +3,11 @@ const multer = require('multer');
 //Ma collection des MIMES
 
 const MIME_TYPES = {
-    "image/gif": "gif",
-    "image/x-icon": "ico",
-    "image/jpeg": "jpeg",
-    "image/png": "png",
-    "image/jpg": "jpg",
+    "image/gif": ".gif",
+    "image/x-icon": ".ico",
+    "image/jpeg": ".jpeg",
+    "image/png": ".png",
+    "image/jpg": ".jpg",
 }
 
 //La destination 
