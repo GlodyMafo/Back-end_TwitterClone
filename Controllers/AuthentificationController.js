@@ -3,12 +3,15 @@ const jwt = require('jsonwebtoken');
 const users = [
     {
         id: 1,
+        name:'Mafo',
         username: 'admin',
         password: 'password123',
+        email:'glodymafokis@gmail.com',
+        profil:'',
+        cover:''
     },
 
 ];
-
 
 // Fonction de vérification de l'utilisateur
 const authenticateUser = (username, password) => {
@@ -44,7 +47,7 @@ exports.logInUser = (req, res) => {
 
     const user = authenticateUser(username, password);
     if (!user) {
-        return res.status(401).send('Identifiants incorrects');
+        return res.status(401).send("Nom d'utilisateur ou mot de passe incorrect");
     }
 
     // Génération d'un token JWT
