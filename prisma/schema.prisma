@@ -10,28 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Définition du modèle User
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  profile   Profile? 
+  posts     Post[]   // Relation pour récupérer les posts de l'utilisateur
+}
+
+// Définition du modèle Profile
+model Profile {
+  id        Int    @id @default(autoincrement())
+  bio       String?
+  avatar    String?
+  cover     String?
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int    @unique
+}
+
+// Définition du modèle Post
 model Post {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+  text      String
+  pictures  String[]
+  likes     Int      @default(0)
+  author    User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
-
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
-}

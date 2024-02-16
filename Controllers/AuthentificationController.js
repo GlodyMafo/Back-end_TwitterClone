@@ -1,63 +1,78 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const users = [
-    {
-        id: 1,
-        name:'Mafo',
-        username: 'admin',
-        password: 'password123',
-        email:'glodymafokis@gmail.com',
-        profil:'',
-        cover:''
-    },
 
-];
+// // fonction pour l'inscription
 
-// Fonction de vérification de l'utilisateur
-const authenticateUser = (username, password) => {
-    const user = users.find(u => u.username === username && u.password === password);
-    return user;
-}
+exports.signUpUser = async (req, res) => {
+  const { email, name, password } = req.body;
 
-// fonction pour l'inscription
-
-exports.signUpUser = (req, res) => {
-    const { username, password } = req.body;
-
-    const existingUser = users.find(u => u.username === username);
-    if (existingUser) {
-        return res.status(400).send('Utilisateur déjà existant');
-    }
-
-    const newUser = {
-        id: users.length + 1,
-        username,
-        password,
-    };
-    users.push(newUser);
-
-    res.status(201).send(newUser);
-}
-
-
-// Fonction pour la connexion
-
-exports.logInUser = (req, res) => {
-    const { username, password } = req.body;
-
-    const user = authenticateUser(username, password);
-    if (!user) {
-        return res.status(401).send("Nom d'utilisateur ou mot de passe incorrect");
-    }
-
-    // Génération d'un token JWT
-    const token = jwt.sign({ id: user.id }, 'secretKey', { expiresIn: '1h' });
-
-    // Envoi d'une réponse
-    res.status(200).send({
-        message: 'Utilisateur authentifié',
-        token,
+  try {
+    // Vérifiez si l'utilisateur existe déjà
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email,
+      },
     });
-}
+
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+
+    // Hash du mot de passe
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Créer un nouvel utilisateur
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+    });
+
+    res.status(201).json({newUser });
+  } catch (error) {
+    console.error('Error signing up:', error);
+    res.status(500).json({ error: 'An error occurred while signing up' });
+  }
+};
+
+
+// // Fonction pour la connexion
+
+exports.logInUser = async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      // Vérifiez si l'utilisateur existe
+      const user = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+  
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
+  
+      // Vérifiez le mot de passe
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!passwordMatch) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
+  
+      // Créez un jeton JWT pour l'utilisateur
+      const token = jwt.sign({ userId: user.id }, 'your_secret_key');
+  
+      res.status(200).json({ token });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      res.status(500).json({ error: 'An error occurred while logging in' });
+    }
+  }
 
 
