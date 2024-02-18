@@ -15,16 +15,20 @@ tweetsRoute.get('/', tweetsController.showTweet);
 
 // Créer un nouveau tweet
 
-tweetsRoute.post('/', upload.single('image'), tweetsController.postTweet);
+tweetsRoute.post('/',upload.array('pictures', 5), tweetsController.postTweet);
 
 
-// Lire un tweet à partir de l'Id utilisateur
+// Lire les tweets à partir de l'Id utilisateur
 
-tweetsRoute.get('/:id', tweetsController.showById);
+tweetsRoute.get('/:userId/tweets', tweetsController.showAllByUserId );
+
+// Lire un seul tweet à partir de l'Id utilisateur
+
+tweetsRoute.get('/:userId/tweets/:id', tweetsController.showById);
 
 // Modification d'un tweet
 
-tweetsRoute.put('/:id', upload.single('image'), tweetsController.editTweet);
+tweetsRoute.put('/:id', tweetsController.editTweet);
 
 // Supprimer un tweet
 
