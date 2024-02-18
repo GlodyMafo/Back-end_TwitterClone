@@ -104,13 +104,13 @@ exports.editTweet = async (req, res) => {
 // Supprimer un tweet
 
 exports.deleteTweet = async (req, res) => {
-  const { postId } = req.params;
+  const { id } = req.params;
 
   try {
     // Vérifiez si le post existe
     const existingPost = await prisma.post.findUnique({
       where: {
-        id: parseInt(postId),
+        id: parseInt(id),
       },
     });
 
@@ -121,7 +121,7 @@ exports.deleteTweet = async (req, res) => {
     // Supprimez le post de la base de données
     await prisma.post.delete({
       where: {
-        id: parseInt(postId),
+        id: parseInt(id),
       },
     });
 
@@ -131,3 +131,56 @@ exports.deleteTweet = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while deleting post.' });
   }
 };
+
+//faire un like
+
+exports.likePost= async (req, res) => {
+  const { id } = req.params;
+  const { action } = req.body; // 'like' ou 'unlike'
+
+  try {
+    // Récupérer le post spécifié
+    const post = await prisma.post.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found.' });
+    }
+
+    // Mettre à jour le nombre de likes en fonction de l'action
+    let updatedPost;
+    if (action === 'like') {
+      updatedPost = await prisma.post.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          likes: {
+            increment: 1,
+          },
+        },
+      });
+    } else if (action === 'unlike') {
+      updatedPost = await prisma.post.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          likes: {
+            decrement: 1,
+          },
+        },
+      });
+    } else {
+      return res.status(400).json({ error: 'Invalid action.' });
+    }
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    console.error('Error updating likes:', error);
+    res.status(500).json({ error: 'An error occurred while updating likes.' });
+  }
+}

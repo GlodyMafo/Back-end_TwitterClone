@@ -34,4 +34,8 @@ tweetsRoute.put('/:id', tweetsController.editTweet);
 
 tweetsRoute.delete('/:id', tweetsController.deleteTweet);
 
+//Liker un post 
+
+tweetsRoute.post('/:id/like')
+
 module.exports = tweetsRoute;
