@@ -4,7 +4,7 @@ const app = express();
 
 const tweetRoute = require('./Routes/tweetRoute.js');
 
-const usersRoute = require('./Routes/usersRoutes.js');
+const profilRoutes = require('./Routes/profilRoutes.js');
 
 const loginRoute=require( './Routes/logInRouter.js');
 
@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use('/tweets', tweetRoute);
 
-app.use('/user', usersRoute);
+app.use('/profil', profilRoutes);
 
 app.use('/login',loginRoute);
 

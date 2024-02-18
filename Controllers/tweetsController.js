@@ -1,30 +1,30 @@
-const tweets = [
-  {
-    "id": 1,
-    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
-    "url": "https://via.placeholder.com/600/92c952",
-    "thumbnailUrl": "https://via.placeholder.com/150/92c952",
-    "like": 9122,
-    "repost": 10
-  }
-]
-
 
 // Lire tous les tweets
 
-exports.showTweet = (req, res) => {
-  res.json(tweets);
-}
+// exports.showTweet = (req, res) => {
+//   res.json(tweets);
+// }
 
 // Créer un nouveau tweet
 
-exports.postTweet = (req, res) => {
-  const newTweet = req.body;
-  newTweet.id = tweets.length + 1;
-  newTweet.image = req.file.path;
-  tweets.push(newTweet);
-  res.json(newTweet);
+exports.postTweet = async (req, res) => {
+  const { text } = req.body;
+  const picturePaths = req.files.map(file => file.path);
+
+  try {
+    // Créer un nouveau post dans la base de données avec les chemins des photos
+    const newPost = await prisma.post.create({
+      data: {
+        text,
+        pictures: picturePaths,
+      },
+    });
+
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).json({ error: 'An error occurred while creating post.' });
+  }
 }
 
 // Lire un tweet à partir de l'Id utilisateur
