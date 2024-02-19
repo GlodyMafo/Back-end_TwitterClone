@@ -1,10 +1,18 @@
-
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 // Lire tous les tweets
 
-// exports.showTweet = (req, res) => {
-//   res.json(tweets);
-// }
+exports.showTweet = async (req, res) => {
+  try {
+    // Récupérer tous les posts de la base de données
+    const posts = await prisma.post.findMany();
 
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ error: 'erreur 500.' });
+  }
+}
 // Créer un nouveau tweet
 
 exports.postTweet = async (req, res) => {
@@ -23,7 +31,7 @@ exports.postTweet = async (req, res) => {
     res.status(201).json(newPost);
   } catch (error) {
     console.error('Error creating post:', error);
-    res.status(500).json({ error: 'An error occurred while creating post.' });
+    res.status(500).json({ error: 'Erreur 500.' });
   }
 }
 
@@ -43,29 +51,10 @@ exports.showAllByUserId = async (req, res) => {
     res.status(200).json(userPosts);
   } catch (error) {
     console.error('Error fetching user posts:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user posts.' });
+    res.status(500).json({ error: 'Erreur 500.' });
   }
 }
 
-// Lire un seul à partir de l'Id utilisateur
-
-exports.showById = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    // Récupérer les posts de l'utilisateur spécifié
-    const userPosts = await prisma.post.findMany({
-      where: {
-        userId: parseInt(userId),
-      },
-    });
-
-    res.status(200).json(userPosts);
-  } catch (error) {
-    console.error('Error fetching user posts:', error);
-    res.status(500).json({ error: 'An error occurred while fetching user posts.' });
-  }
-}
 // Modification d'un tweet
 
 exports.editTweet = async (req, res) => {
@@ -81,7 +70,7 @@ exports.editTweet = async (req, res) => {
     });
 
     if (!existingPost) {
-      return res.status(404).json({ error: 'Post not found.' });
+      return res.status(404).json({ error: 'Tweet non trouvé.' });
     }
 
     // Mettez à jour le texte du post dans la base de données
@@ -97,7 +86,7 @@ exports.editTweet = async (req, res) => {
     res.status(200).json(updatedPost);
   } catch (error) {
     console.error('Error updating post:', error);
-    res.status(500).json({ error: 'An error occurred while updating post.' });
+    res.status(500).json({ error: 'Erreur lors du chargement du tweet.' });
   }
 }
 
@@ -115,7 +104,7 @@ exports.deleteTweet = async (req, res) => {
     });
 
     if (!existingPost) {
-      return res.status(404).json({ error: 'Post not found.' });
+      return res.status(404).json({ error: 'Tweet non trouvé.' });
     }
 
     // Supprimez le post de la base de données
@@ -125,10 +114,10 @@ exports.deleteTweet = async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: 'Post deleted successfully.' });
+    res.status(200).json({ message: 'Le tweet a été supprimer avec succes.' });
   } catch (error) {
     console.error('Error deleting post:', error);
-    res.status(500).json({ error: 'An error occurred while deleting post.' });
+    res.status(500).json({ error: 'Erreur 500.' });
   }
 };
 
@@ -147,7 +136,7 @@ exports.likePost= async (req, res) => {
     });
 
     if (!post) {
-      return res.status(404).json({ error: 'Post not found.' });
+      return res.status(404).json({ error: 'Tweet non trouvé.' });
     }
 
     // Mettre à jour le nombre de likes en fonction de l'action
@@ -175,12 +164,12 @@ exports.likePost= async (req, res) => {
         },
       });
     } else {
-      return res.status(400).json({ error: 'Invalid action.' });
+      return res.status(400).json({ error: 'action action invalide.' });
     }
 
     res.status(200).json(updatedPost);
   } catch (error) {
     console.error('Error updating likes:', error);
-    res.status(500).json({ error: 'An error occurred while updating likes.' });
+    res.status(500).json({ error: 'Erreur de chargement des likes.' });
   }
 }

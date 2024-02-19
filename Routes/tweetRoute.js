@@ -20,11 +20,7 @@ tweetsRoute.post('/',upload.array('pictures', 5), tweetsController.postTweet);
 
 // Lire les tweets à partir de l'Id utilisateur
 
-tweetsRoute.get('/:userId/tweets', tweetsController.showAllByUserId );
-
-// Lire un seul tweet à partir de l'Id utilisateur
-
-tweetsRoute.get('/:userId/tweets/:id', tweetsController.showById);
+tweetsRoute.get('/:userId/Post', tweetsController.showAllByUserId );
 
 // Modification d'un tweet
 

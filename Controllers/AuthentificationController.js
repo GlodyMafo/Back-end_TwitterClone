@@ -21,10 +21,10 @@ exports.signUpUser = async (req, res) => {
             return res.status(400).json({ error: 'L\'adresse Email est déjà utillisé' });
         }
 
-        // Hash du mot de passe
+        // Hash du mot de passe (le cryptage)
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Créer un nouvel utilisateur
+        // Création d'un nouveau compte
         const newUser = await prisma.user.create({
             data: {
                 email,
