@@ -1,10 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+
+
 // Lire tous les tweets
 
 exports.showTweet = async (req, res) => {
   try {
-    // Récupérer tous les posts de la base de données
+    // Récupération de tous les tweets de la base de données
+
     const posts = await prisma.post.findMany();
 
     res.status(200).json(posts);
