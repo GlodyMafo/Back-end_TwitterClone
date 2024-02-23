@@ -6,11 +6,44 @@ const jwt = require('jsonwebtoken');
 
 // // fonction pour l'inscription
 
+// exports.signUpUser = async (req, res) => {
+//     const { email, name, password } = req.body;
+
+//     try {
+      
+//         const existingUser = await prisma.user.findUnique({
+//             where: {
+//                 email,
+//             },
+//         });
+
+//         if (existingUser) {
+//             return res.status(400).json({ error: 'L\'adresse Email est déjà utillisé' });
+//         }
+
+//         // Hash du mot de passe (le cryptage)
+//         const hashedPassword = await bcrypt.hash(password, 10);
+
+//         // Création d'un nouveau compte
+//         const newUser = await prisma.user.create({
+//             data: {
+//                 email,
+//                 name,
+//                 password: hashedPassword,
+//             },
+//         });
+
+//         res.status(201).json({ newUser });
+//     } catch (error) {
+//         console.error('Error signing up:', error);
+//         res.status(500).json({ error: 'Il y a eu une erreur à l\'inscription veuillez ressayer' });
+//     }
+// };
+
 exports.signUpUser = async (req, res) => {
     const { email, name, password } = req.body;
 
     try {
-      
         const existingUser = await prisma.user.findUnique({
             where: {
                 email,
@@ -18,13 +51,11 @@ exports.signUpUser = async (req, res) => {
         });
 
         if (existingUser) {
-            return res.status(400).json({ error: 'L\'adresse Email est déjà utillisé' });
+            return res.status(400).json({ error: 'L\'adresse Email est déjà utilisée' });
         }
 
-        // Hash du mot de passe (le cryptage)
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Création d'un nouveau compte
         const newUser = await prisma.user.create({
             data: {
                 email,
@@ -33,12 +64,27 @@ exports.signUpUser = async (req, res) => {
             },
         });
 
-        res.status(201).json({ newUser });
+        // Création d'un nouveau profil lié à l'utilisateur nouvellement créé
+        const newProfile = await prisma.profile.create({
+            data: {
+                bio: null, // Vous pouvez initialiser ces valeurs à ce que vous voulez
+                avatar: null,
+                cover: null,
+                user: {
+                    connect: {
+                        id: newUser.id, // Lien vers l'utilisateur nouvellement créé
+                    },
+                },
+            },
+        });
+
+        res.status(201).json({ newUser, newProfile });
     } catch (error) {
         console.error('Error signing up:', error);
         res.status(500).json({ error: 'Il y a eu une erreur à l\'inscription veuillez ressayer' });
     }
 };
+
 
 
 // // Fonction pour la connexion
